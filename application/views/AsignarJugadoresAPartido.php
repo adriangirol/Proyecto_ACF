@@ -1,4 +1,4 @@
-<h1 class="page-header ">Fecha : <?=$fecha?> </h1>
+<h1 class="page-header ">Fecha : <?=$fecha?>  - Rival: <?=$rival?> </h1>
   <?php echo validation_errors(); ?>
    <form action="" method="POST">
    <table class="table table-striped table-responsives table-hover">
@@ -17,7 +17,7 @@
       </td>
       </tr>
     <?php endforeach; ?>
-      <input type="hidden" value="<?=$idEvento?>" name="idEntrenamiento" id="idEntrenamiento">
+      <input type="text" value="<?=$idEvento?>" name="idPartido" id="idPartido">
       <input type="hidden" value="<?=$fecha?>" name="fecha" id="fecha">
    </table>
       <input type="submit">

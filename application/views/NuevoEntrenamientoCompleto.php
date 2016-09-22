@@ -2,7 +2,7 @@
 <form action="" method="POST" >
     <HR width=100% align="center">
          <div class="form-group ">
-              <?php echo form_label('Equipo: &nbsp;  '), form_dropdown('equipo', $equipos); ?>
+              <?php echo form_label('Equipo: &nbsp;  '), form_dropdown('idEquipo', $equipos); ?>
         </div>
         <div>
         <div class="form-group ">

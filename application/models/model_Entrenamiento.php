@@ -29,7 +29,19 @@ class model_Entrenamiento extends CI_Model {
         $this->db->insert('asistenciaentrenamiento', $datos);
         return $this->db->insert_id();
     }
-    
+    public function EntrenamientosPorEquipo($idEquipo){
+        
+        $query=$this->db->query("SELECT entrenamiento.Fecha_Entrenamiento FROM entrenamiento WHERE ID_equipo = '".$idEquipo."' ORDER BY Fecha_Entrenamiento ;");
+         return $query->result_array();
+        
+    }
+    public function EntrenamientosDelJugador($idJugador){
+        $query=$this->db->query("SELECT entrenamiento.Fecha_Entrenamiento "
+                                    . "FROM asistenciaentrenamiento, entrenamiento "
+                                        . "WHERE asistenciaentrenamiento.Entrenamiento_ID_Entrenamiento=entrenamiento.ID_Entrenamiento "
+                                            . "AND Jugador_ID_Jugador = '".$idJugador."' ORDER BY entrenamiento.Fecha_Entrenamiento ;");
+         return $query->result_array();
+    }
 
     
 

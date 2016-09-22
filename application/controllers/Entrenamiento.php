@@ -22,14 +22,12 @@ class Entrenamiento extends CI_Controller {
     public function NuevoEntrenamiento($equipo) {
         //$this->Autenticacion();
         $this->load->helper('url');
-        $this->load->model('Model_entrenamiento', "entrenamiento");
+        $this->load->model('model_Entrenamiento', "entrenamiento");
         $this->load->model('model_Equipos', "equipos");
         $this->load->model('model_Jugadores', "jugadores");
         $this->load->library('form_validation');
         $this->load->helper('form');
-        $equipo=null;
-        $idNuevoEntrenamiento=null;
-        $fecha=null;
+        $idNuevoEntrenamiento="";
         //Entrada por Nuevo Entrenamiento
         if ($equipo == 0) {
             $this->form_validation->set_rules('fecha', 'fecha', 'required');
@@ -42,12 +40,13 @@ class Entrenamiento extends CI_Controller {
             } else {
                 //Si la validación es correcta, cogemos los datos de la variable POST
                 //y los enviamos al modelo
-                $equipo = $this->input->post('equipo');
+                $equipo = $this->input->post('idEquipo');
                 $fecha = $this->input->post('fecha');
                 $miEntreno['ID_Entrenamiento'] = $this->entrenamiento->NuevoId();
                 $miEntreno['Fecha_Entrenamiento'] = $fecha = $this->input->post('fecha');
-                $miEntreno['ID_equipo'] = $equipo = $this->input->post('idEquipo');
-                $idNuevoEntrenamiento = $this->entrenamiento->NuevoEntrenamiento($miEntreno);
+                $miEntreno['ID_equipo'] = $equipo;
+                $idNuevoEntrenamiento = $miEntreno['ID_Entrenamiento'];
+                $this->entrenamiento->NuevoEntrenamiento($miEntreno);
             }
             //Entrada por Equipos
         } else {
@@ -63,14 +62,16 @@ class Entrenamiento extends CI_Controller {
                 $miEntreno['ID_Entrenamiento'] = $this->entrenamiento->NuevoId();
                 $miEntreno['Fecha_Entrenamiento'] = $fecha = $this->input->post('fecha');
                 $miEntreno['ID_equipo'] = $equipo = $this->input->post('idEquipo');
-                $idNuevoEntrenamiento = $this->entrenamiento->NuevoEntrenamiento($miEntreno);
+                $idNuevoEntrenamiento = $miEntreno['ID_Entrenamiento'];
+                $this->entrenamiento->NuevoEntrenamiento($miEntreno);
+                
             }
         }
-        if($idNuevoEntrenamiento!=null){
+        if($idNuevoEntrenamiento!=""){
         $this->session->set_flashdata('equipo', $equipo);
         $this->session->set_flashdata('fecha', $fecha);
         $this->session->set_flashdata('idEntrenamiento', $idNuevoEntrenamiento);
-        redirect("/Asignar/Asignar/", location, 301);
+        redirect("/Asignar/AsignarEntrenamiento/", location, 301);
         }
     }
 

@@ -57,6 +57,14 @@ class Seguimiento extends CI_Controller {
             }  
             
         }
+//        echo "<pre>";
+//        echo "Entrenamientos :";
+//            print_r($fechaEntrenamientos);
+//        echo "Jugadores :";
+//            print_r($Jugadores);
+//        echo "Partidos :";
+//            print_r($partidos);
+//        echo "</pre>";
         $cuerpo = $this->load->view('SeguimientoEquipo', Array('entrenamientos' => $fechaEntrenamientos,'Jugadores' => $Jugadores,'partidos'=>$partidos), true);
         $this->load->view('Index', Array('cuerpo' => $cuerpo));
     }

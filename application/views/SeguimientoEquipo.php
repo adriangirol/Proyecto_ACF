@@ -16,14 +16,14 @@
                 <?php endforeach; ?>
                 </th>
                 <?php for ($i = 0; $i < count($Jugadores); $i++): ?>
-                    <tr align="center">
+                    <tr>
                         <td><b><?= $Jugadores[$i]['Nombre'] ?></b></td>
                         <?php
                         for ($v = 0; $v < count($entrenamientos); $v++) {
-                            if (in_array($entrenamientos[$v], $Jugadores[$i]['Entrenamientos'])) {
-                                 echo '<td><img src="'.base_url().'asset/img/Okay.png"> </td>';
+                            if (isset($Jugadores[$i]['Entrenamientos'])&& in_array($entrenamientos[$v], $Jugadores[$i]['Entrenamientos'])) {
+                                 echo '<td align="center"><img src="'.base_url().'asset/img/Okay.png" title="'.$entrenamientos[$v].'"> </td>';
                             } else {
-                                echo '<td></td>';
+                                echo '<td align="center"></td>';
                             }
                         }
                         echo "</tr>";
@@ -40,7 +40,7 @@
                     <?php
                     foreach ($partidos as $partido) {
                         $IdaVuelta = $partido['Ida'];
-                        if ($IdaVuelta == "0") {
+                        if ($IdaVuelta == "1") {
 
                             $IdaVuelta = 'Ida';
                         } else {
@@ -53,14 +53,14 @@
                     ?>
                 </th>
                 <?php for ($i = 0; $i < count($Jugadores); $i++): ?>
-                    <tr align="center">
+                    <tr>
                         <td><b><?= $Jugadores[$i]['Nombre'] ?></b></td>
                         <?php
                         for ($v = 0; $v < count($partidos); $v++) {
-                            if (in_array($partidos[$v]['Fecha'], $Jugadores[$i]['Partidos'])) {
-                                echo '<td><img src="'.base_url().'asset/img/Okay.png"> </td>';
+                            if (isset($Jugadores[$i]['Partidos'])&&in_array($partidos[$v]['Fecha'], $Jugadores[$i]['Partidos'])) {
+                                echo '<td align="center"><img src="'.base_url().'asset/img/Okay.png" title="'.$partidos[$v]['Fecha'].'"> </td>';
                             } else {
-                                echo '<td></td>';
+                                echo '<td align="center"></td>';
                             }
                         }
                         echo "</tr>";

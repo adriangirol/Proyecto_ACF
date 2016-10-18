@@ -21,44 +21,46 @@ class Asignar extends CI_Controller {
      */
     public function AsignarEntrenamiento() {
 
-        if ($this->session->userdata('logged_in')) {
-            $this->load->library('form_validation');
-            $this->load->helper('form');
-            $this->load->model('model_Equipos', "equipos");
-            $this->load->model('model_Entrenamiento', 'entrenamiento');
-            $this->load->model('model_Jugadores', "jugadores");
-            $fecha = "";
+        if ($this->session->userdata('logged_in')) 
+            {
+                $this->load->library('form_validation');
+                $this->load->helper('form');
+                $this->load->model('model_Equipos', "equipos");
+                $this->load->model('model_Entrenamiento', 'entrenamiento');
+                $this->load->model('model_Jugadores', "jugadores");
+                $fecha = "";
 
-            $this->form_validation->set_rules('check[]', 'check[]', 'required');
-            $this->form_validation->set_rules('idEntrenamiento', 'idEntrenamiento', 'required');
-            if ($this->form_validation->run() === FALSE) {
-                $equipo = $this->session->flashdata('equipo');
-                $fecha = $this->session->flashdata('fecha');
-                $idEntrenamiento = $this->session->flashdata('idEntrenamiento');
-                $misJugadores = $this->jugadores->JugadoresPorEquipo($equipo);
-                $cuerpo = $this->load->view('AsignarJugadoresAlEntrenamiento', Array('misJugadores' => $misJugadores, 'fecha' => $fecha, 'idEvento' => $idEntrenamiento), true);
-                $this->load->view('Index', Array('cuerpo' => $cuerpo));
-            } else {
-                //Si la validación es correcta, cogemos los datos de la variable POST
-                //y los enviamos al modelo
-                $idJugadoresAsistentes = $this->input->post('check');
-                $fecha = $this->input->post('fecha'); //this returns an array so use foreach to extract data
-                $idEntrenamiento = $this->input->post("idEntrenamiento");
-                foreach ($idJugadoresAsistentes as $key => $value) {
-                    $entrenamientoJugador['Entrenamiento_ID_Entrenamiento'] = $idEntrenamiento;
-                    $entrenamientoJugador['Jugador_ID_Jugador'] = $value;
-                    $this->entrenamiento->AsignarEntrenamientoAJugador($entrenamientoJugador);
-                    $jugadoresAsistentes[$value] = $this->jugadores->TraerDatoJugador($value);
+                $this->form_validation->set_rules('check[]', 'check[]', 'required');
+                $this->form_validation->set_rules('idEntrenamiento', 'idEntrenamiento', 'required');
+                if ($this->form_validation->run() === FALSE) {
+                    $equipo = $this->session->flashdata('equipo');
+                    $fecha = $this->session->flashdata('fecha');
+                    $idEntrenamiento = $this->session->flashdata('idEntrenamiento');
+                    $misJugadores = $this->jugadores->JugadoresPorEquipo($equipo);
+                    $cuerpo = $this->load->view('AsignarJugadoresAlEntrenamiento', Array('misJugadores' => $misJugadores, 'fecha' => $fecha, 'idEvento' => $idEntrenamiento), true);
+                    $this->load->view('Index', Array('cuerpo' => $cuerpo));
+                } else {
+                    //Si la validación es correcta, cogemos los datos de la variable POST
+                    //y los enviamos al modelo
+                    $idJugadoresAsistentes = $this->input->post('check');
+                    $fecha = $this->input->post('fecha'); //this returns an array so use foreach to extract data
+                    $idEntrenamiento = $this->input->post("idEntrenamiento");
+                    foreach ($idJugadoresAsistentes as $key => $value) {
+                        $entrenamientoJugador['Entrenamiento_ID_Entrenamiento'] = $idEntrenamiento;
+                        $entrenamientoJugador['Jugador_ID_Jugador'] = $value;
+                        $this->entrenamiento->AsignarEntrenamientoAJugador($entrenamientoJugador);
+                        $jugadoresAsistentes[$value] = $this->jugadores->TraerDatoJugador($value);
+                    }
+                    echo "<pre>";
+                    echo "</pre>";
+                    $cuerpo = $this->load->view('ResumenAsistencia', Array('misJugadores' => $jugadoresAsistentes, 'fecha' => $fecha), true);
+
+                    $this->load->view('Index', Array('cuerpo' => $cuerpo));
                 }
-                echo "<pre>";
-                echo "</pre>";
-                $cuerpo = $this->load->view('ResumenAsistencia', Array('misJugadores' => $jugadoresAsistentes, 'fecha' => $fecha), true);
-
-                $this->load->view('Index', Array('cuerpo' => $cuerpo));
+            } 
+            else {
+             $this->load->view('errors/error_general', Array('heading' => "<h1> SIN PERMISOS</h1>", 'message' => '<p> Usted no posee permisos para accerder aqui.</p>'));
             }
-        } else {
-            $this->load->view('errors/error_general', Array('heading' => "<h1> SIN PERMISOS</h1>", 'message' => '<p> Usted no posee permisos para accerder aqui.</p>'));
-        }
     }
 
     public function AsignarPartido() {

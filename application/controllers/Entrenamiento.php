@@ -20,6 +20,7 @@ class Entrenamiento extends CI_Controller {
      * @see https://codeigniter.com/user_guide/general/urls.html
      */
     public function NuevoEntrenamiento($equipo) {
+    if ($this->session->userdata('logged_in')) {
         //$this->Autenticacion();
         $this->load->helper('url');
         $this->load->model('model_Entrenamiento', "entrenamiento");
@@ -74,8 +75,15 @@ class Entrenamiento extends CI_Controller {
         redirect("/Asignar/AsignarEntrenamiento/", location, 301);
         }
     }
+     else 
+         {
+             $this->load->view('errors/error_general', Array('heading' => "<h1> SIN PERMISOS</h1>", 'message' => '<p> Usted no posee permisos para accerder aqui.</p>'));
+         }
+    }
 
     public function DetalleEquipo($id) {
+    if ($this->session->userdata('logged_in'))
+    {
         $this->load->helper('url');
         $this->load->model('model_Equipos', "equipos");
         $this->load->model('model_Jugadores', "jugadores");
@@ -86,6 +94,11 @@ class Entrenamiento extends CI_Controller {
         }
         $cuerpo = $this->load->view('DetalleEquipo', Array('miEquipo' => $miEquipo), true);
         $this->load->view('Index', Array('cuerpo' => $cuerpo));
+    }    
+    else 
+         {
+             $this->load->view('errors/error_general', Array('heading' => "<h1> SIN PERMISOS</h1>", 'message' => '<p> Usted no posee permisos para accerder aqui.</p>'));
+         }
     }
 
 }

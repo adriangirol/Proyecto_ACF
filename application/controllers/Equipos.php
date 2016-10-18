@@ -20,24 +20,38 @@ class Equipos extends CI_Controller {
 	 */
 	public function ListaEquipos()
 	{
-		$this->load->helper('url');
-		$this->load->model('model_Equipos', "equipos");
-		$misEquipos =  $this->equipos->TraerEquipos();
+        if ($this->session->userdata('logged_in')){
+         
+          $this->load->helper('url');
+          $this->load->model('model_Equipos', "equipos");
+          $misEquipos =  $this->equipos->TraerEquipos();
 	  $cuerpo=$this->load->view('ListaEquipos',Array('misEquipos' => $misEquipos),true);
-	  $this->load->view('Index',Array('cuerpo' => $cuerpo));
+	  $this->load->view('Index',Array('cuerpo' => $cuerpo));   
+        }
+        else 
+         {
+             $this->load->view('errors/error_general', Array('heading' => "<h1> SIN PERMISOS</h1>", 'message' => '<p> Usted no posee permisos para accerder aqui.</p>'));
+         }
 	}
 
 	public function DetalleEquipo($id)
 	{
-		$this->load->helper('url');
-		$this->load->model('model_Equipos', "equipos");
-		$this->load->model('model_Jugadores', "jugadores");
-		$miEquipo =  $this->equipos->TraerJugadoresEquipo($id);
-		print_r($miEquipo);
-		foreach ($miEquipo as $idx=>$jugador){
-				$miEquipo[$idx]['info']=$this->jugadores->PosicionesJugador($jugador['ID']);
-		}
-		$cuerpo=$this->load->view('DetalleEquipo',Array('miEquipo' => $miEquipo),true);
-		$this->load->view('Index',Array('cuerpo' => $cuerpo));
+            if ($this->session->userdata('logged_in'))
+                {
+                    $this->load->helper('url');
+                    $this->load->model('model_Equipos', "equipos");
+                    $this->load->model('model_Jugadores', "jugadores");
+                    $miEquipo =  $this->equipos->TraerJugadoresEquipo($id);
+                    print_r($miEquipo);
+                    foreach ($miEquipo as $idx=>$jugador){
+                                    $miEquipo[$idx]['info']=$this->jugadores->PosicionesJugador($jugador['ID']);
+                    }
+                    $cuerpo=$this->load->view('DetalleEquipo',Array('miEquipo' => $miEquipo),true);
+                    $this->load->view('Index',Array('cuerpo' => $cuerpo));
+                }
+            else 
+                {
+                 $this->load->view('errors/error_general', Array('heading' => "<h1> SIN PERMISOS</h1>", 'message' => '<p> Usted no posee permisos para accerder aqui.</p>'));
+                }
 	}
 }

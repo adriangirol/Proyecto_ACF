@@ -20,24 +20,37 @@ class Jugadores extends CI_Controller {
 	 */
 	public function ListaJugadores()
 	{
-		$this->load->helper('url');
-		$this->load->model('model_Jugadores', "jugadores");
-		$misJugadores =  $this->jugadores->TraerJugadores();
+        if ($this->session->userdata('logged_in')){
+            $this->load->helper('url');
+            $this->load->model('model_Jugadores', "jugadores");
+            $misJugadores =  $this->jugadores->TraerJugadores();
 
-	  $cuerpo=$this->load->view('ListaJugadores',Array('misJugadores' => $misJugadores),true);
+             $cuerpo=$this->load->view('ListaJugadores',Array('misJugadores' => $misJugadores),true);
 
-	  $this->load->view('Index',Array('cuerpo' => $cuerpo));
+            $this->load->view('Index',Array('cuerpo' => $cuerpo));
+        }
+        else 
+            {
+             $this->load->view('errors/error_general', Array('heading' => "<h1> SIN PERMISOS</h1>", 'message' => '<p> Usted no posee permisos para accerder aqui.</p>'));
+            }
 	}
 
 	public function DatosJugador($id)
 	{
-		$this->load->helper('url');
-		$this->load->model('model_Jugadores', "jugadores");
+            if ($this->session->userdata('logged_in'))
+            {
+                $this->load->helper('url');
+                $this->load->model('model_Jugadores', "jugadores");
 
-		$miJugador =  $this->jugadores->TraerDatoJugador($id);
-    $posiciones=$this->jugadores->PosicionesJugador($id);
-		$cuerpo=$this->load->view('DetalleJugador',Array('miJugador' => $miJugador, 'posiciones' => $posiciones),true);
+                $miJugador =  $this->jugadores->TraerDatoJugador($id);
+                $posiciones=$this->jugadores->PosicionesJugador($id);
+                $cuerpo=$this->load->view('DetalleJugador',Array('miJugador' => $miJugador, 'posiciones' => $posiciones),true);
 
-	$this->load->view('Index',Array('cuerpo' => $cuerpo));
+                $this->load->view('Index',Array('cuerpo' => $cuerpo));
+            }
+            else 
+            {
+                $this->load->view('errors/error_general', Array('heading' => "<h1> SIN PERMISOS</h1>", 'message' => '<p> Usted no posee permisos para accerder aqui.</p>'));
+            }
 	}
 }
